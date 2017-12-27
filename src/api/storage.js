@@ -10,8 +10,17 @@ var DEFAULT_HOST = "http://127.0.0.1:9545";
 // hack to ensure 0.1 version of web3 doesn't clash with older versions
 Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;  
 
+function addProtocolIfNeeded(host) {
+  var url = host; 
+  if (!/^(?:f|ht)tps?:\/\//.test(host)) {
+    url = "http://" + host;
+  }
+  console.log(url);
+  return url;
+}
+
 async function getContract(host) {
-  let web3 = new Web3(host); 
+  let web3 = new Web3(addProtocolIfNeeded(host)); 
   let coinbase = await web3.eth.getCoinbase(); 
   storage.setProvider(web3.currentProvider);
   storage.defaults({ from: coinbase}); // bug in truffle that requires us that we set this

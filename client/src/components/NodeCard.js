@@ -36,22 +36,7 @@ class NodeCard extends Component {
     };
   }
 
-  convertToUrl(node) {
-    var url = node; 
-    if (!/^(?:f|ht)tps?:\/\//.test(node)) {
-      url = "http://" + node;
-    }
-    console.log(url);
-    return url;
-  }
-
   componentDidMount() {
-    /*
-    Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
-    this.web3 = new Web3("http://127.0.0.1:22001");
-    console.log(this.web3.currentProvider); 
-    this.loadLatestSharedSecret();
-    */
     this.timerID = setInterval(
       () => this.loadLatestSharedSecret(), 
       1000
@@ -63,20 +48,16 @@ class NodeCard extends Component {
   }
 
   loadLatestSharedSecret() {
-    /*
-    let storage = contract(SimpleStorageContract);
-    storage.setProvider(this.web3.currentProvider);
-    this.web3.eth.getAccounts((error, accounts) => {
-      storage.deployed().then((instance) => {
-        console.log(instance.address);
-        return instance.get({from:accounts[0]});
-      }).then((secret) => {
-        console.log(secret.c[0]);
-        return (this.setState( { sharedSecret: secret.c[0] }));
+    fetch("/api/storage?host=" + this.props.host)
+        .then((response) => {
+        if (response.status >= 400) {
+          throw new Error("Uh oh!");
+        }
+        return response.json();
       })
-    });
-    */
-    this.setState( { sharedSecret: 42 } );
+      .then((data) => {
+        this.setState( { sharedSecret: data.secret } );
+      });    
   }
   
   render() {
