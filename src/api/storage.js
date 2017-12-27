@@ -12,9 +12,12 @@ Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.pr
 
 async function getContract(host) {
   let web3 = new Web3(host); 
+  let coinbase = await web3.eth.getCoinbase(); 
   storage.setProvider(web3.currentProvider);
+  storage.defaults({ from: coinbase}); // bug in truffle that requires us that we set this
 
   let instance = await storage.deployed(); 
+  console.log(instance.address);
 
   return instance; 
 }
@@ -22,14 +25,16 @@ async function getContract(host) {
 /* GET storage */
 router.get('/', async function(req, res, next) {
   let host = req.query.host || DEFAULT_HOST; 
+  console.log(host);
 
   try {
     let instance = await getContract(host); 
     let secret = await instance.get();   
     res.send({ contract: { address: instance.address }, secret: secret }); 
   } catch(e) {
+    console.log(e);
     // an error occurred, for now, just send it back
-    res.send(e); 
+    res.send(JSON.stringify(e)); 
   }
 });
 
@@ -37,17 +42,22 @@ router.get('/', async function(req, res, next) {
 router.post('/', async function(req, res, next) {
   let host = req.query.host || DEFAULT_HOST;
   let value = req.body.value;
+  console.log(host);
+  console.log(value); 
+
   try {
     let instance = await getContract(host); 
     // TODO externalize privateFor, is there a way to retrieve it from the contract object
-    let result = await instance.set(value, {privateFor: ["p0hHr3G2JRLGe+ZuXUDjbGEApNEOyvWEWJ50grcR2wE="]});
+    let result = await instance.set(value, {privateFor: ["oXt+2ucDoU90oMNcHTalxg3T9s2Dh8Ncqx2/OwG8kCo="]});
+    console.log(result);
     // result.tx -- tx hash
     // result.logs -- events triggered during this transaction
     // reslult.reciept -- receipt objects (includes gas used)
     res.send(result); 
   } catch (e) {
+    console.log(e);
     // an error occurred, for now, just send it back
-    res.send(e); 
+    res.send(JSON.stringify(e)); 
   }
 });
 
