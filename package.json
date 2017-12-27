@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "client": "node ./bin/client.js",
-    "server": "node ./bin/www.js",
+    "client": "node ./scripts/client.js",
+    "server": "node ./scripts/api.js",
     "build:contracts": "truffle compile",
     "contracts:migrate": "truffle migrate && npm run contracts:sync-src",
     "contracts:sync-src": "rimraf src/contracts && cp -R build/contracts/ src/contracts"
@@ -20,5 +20,8 @@
     "serve-favicon": "~2.4.5",
     "truffle-contract": "^3.0.1",
     "web3": "^1.0.0-beta.27"
+  },
+  "devDependencies": {
+    "eslint-config-google": "^0.9.1"
   }
 }
