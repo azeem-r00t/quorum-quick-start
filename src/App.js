@@ -1,48 +1,36 @@
-import React, { Component } from 'react';
+var express = require('express');
+var path = require('path');
+var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
 
-import './App.css';
+var app = express();
 
-import SimpleAppBar from './components/AppBar';
-import Introduction from './components/Introduction';
-import Grid from 'material-ui/Grid/Grid';
-import Contract from './components/Contract';
-import TransactionForm from './components/TransactionForm';
-import NodesGrid from './components/NodesGrid';
-  
+// uncomment after placing your favicon in /
+//app.use(favicon(path.join(__dirname, '/', 'favicon.ico')));
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
 
-class App extends Component {
-  render() {
-    return (
-        <div className="App">
-          <Grid container spacing={8}>
-            <Grid item xs={12}>
-              <SimpleAppBar />
-            </Grid>
-            <Grid item xs={12}>
-              <Introduction />
-            </Grid>
-            <Grid item xs={12}>
-              <Contract />
-            </Grid>
-            <Grid item xs={12}>
-              <NodesGrid />
-            </Grid>
-            <Grid item xs={12}>
-              <TransactionForm />
-            </Grid>
-          </Grid>
-          { /* 
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <h1 className="App-title">Welcome to React</h1>
-          </header>
-          <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
-          </p>
-          */ }
-        </div>
-    );
-  }
-}
+app.use('/api/contracts', require('./api/contracts'));
+app.use('/api/storage', require('./api/storage'));
 
-export default App;
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  res.status(500).send({error: err});
+});
+
+module.exports = app;

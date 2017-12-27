@@ -35,7 +35,7 @@ class NodeCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sharedSecret: null, 
+      sharedSecret: '', 
     };
   }
 
@@ -66,11 +66,15 @@ class NodeCard extends Component {
   loadLatestSharedSecret() {
     let storage = contract(SimpleStorageContract);
     storage.setProvider(this.web3.currentProvider);
-    storage.deployed().then((instance) => {
-      console.log(instance.address); 
-    }); /*.then((secret) => {
-      this.setState( { sharedSecret: secret }); 
-    });*/
+    this.web3.eth.getAccounts((error, accounts) => {
+      storage.deployed().then((instance) => {
+        console.log(instance.address);
+        return instance.get({from:accounts[0]});
+      }).then((secret) => {
+        console.log(secret.c[0]);
+        return (this.setState( { sharedSecret: secret.c[0] }));
+      })
+    });
   }
   
   render() {
