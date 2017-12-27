@@ -7,6 +7,7 @@
 var app = require('../src/app');
 var debug = require('debug')('quorum-quick-start:server');
 var http = require('http');
+var bodyParser = require('body-parser');
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,12 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+/**
+ * setup json parsing for the request body
+ */
+app.use(bodyParser.json()); 
+app.use(bodyParser.urlencoded({extended: true})); 
 
 /**
  * Listen on provided port, on all network interfaces.
