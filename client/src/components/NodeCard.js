@@ -4,9 +4,6 @@ import { withStyles } from 'material-ui/styles';
 import Card, {  CardContent } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 import withConfig from './withConfig';
-import {default as Web3} from 'web3';
-import SimpleStorageContract from './../contracts/SimpleStorage.json';
-import {default as contract} from 'truffle-contract';
 
 const styles = theme => ({
   card: {
@@ -49,10 +46,12 @@ class NodeCard extends Component {
   }
 
   componentDidMount() {
+    /*
     Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
     this.web3 = new Web3("http://127.0.0.1:22001");
     console.log(this.web3.currentProvider); 
     this.loadLatestSharedSecret();
+    */
     this.timerID = setInterval(
       () => this.loadLatestSharedSecret(), 
       1000
@@ -64,6 +63,7 @@ class NodeCard extends Component {
   }
 
   loadLatestSharedSecret() {
+    /*
     let storage = contract(SimpleStorageContract);
     storage.setProvider(this.web3.currentProvider);
     this.web3.eth.getAccounts((error, accounts) => {
@@ -75,6 +75,8 @@ class NodeCard extends Component {
         return (this.setState( { sharedSecret: secret.c[0] }));
       })
     });
+    */
+    this.setState( { sharedSecret: 42 } );
   }
   
   render() {

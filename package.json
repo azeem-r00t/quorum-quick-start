@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "client": "node ./bin/client.js",
+    "server": "node ./bin/www.js",
     "build:contracts": "truffle compile",
     "contracts:migrate": "truffle migrate && npm run contracts:sync-src",
     "contracts:sync-src": "rimraf src/contracts && cp -R build/contracts/ src/contracts"
