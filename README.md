@@ -103,6 +103,8 @@ I'm not done yet. There are several improvements that can be made to this projec
 
 2. To debug any issues with geth, you can log into one of the docker containers, attach to geth over ipc, and then utilize the admin and other APIs to verify various aspects of this. Please refer to ethereum/go-ethereum documentation on further details. 
 
+3. If you modify the ports that the quorum network listens to, then this project will stop working. There is an underlying assumption about the ports. 
+
 ## Contributing 
 
 Please feel free to fork this and improve it. You are also welcome to pick and work on any of the issues that are on my radar already.  
