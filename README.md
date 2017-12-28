@@ -1,20 +1,20 @@
 # quorum-quick-start
 Quickstart project demonstrating private smart contract execution on a quorum network. 
 
-The 'SimpleStorage' contract is used as a starter sample smart contract used by many examples out there. In this quickstart, we deploy the 'SimpleStorage' contract as a *private* smart contract to store a shared secret between two parties. 
+The *SimpleStorage* contract is used as a sample smart-contract by several examples out there. In this quickstart, we deploy the *SimpleStorage* contract as a *private* smart contract to store a shared secret between two parties. 
 
-To demonstrate both how the contract works as well as a sample starter app that show cases interaction with a ethereum-type blockchain using the `web3` APIs and `truffle` framework
+We demonstrate how the contract works by way of a sample starter app that show cases interaction with a ethereum-type blockchain using the `web3` APIs and `truffle` framework.
 
-This quickstart also has as API server and a front-end client. The API server exposes a domain and contract-specific API for the front-end and utilizes the `truffle` framework and the `web3` api to interact with the smart contract on the blockchain. 
+This quickstart has as API server and a front-end client. The API server exposes a domain and contract-specific API for the front-end and utilizes the `truffle` framework and the `web3` api to interact with the smart contract on the blockchain. 
 
-The UI simply shows the state of the *private* storage for the smart contract that is only visible to specific nodes that are parties to the contract. It also allows one to update the contract and see the update visible to only parties to the contract. 
+The UI simply shows the state of the *private* storage for the smart contract that is only visible to specific nodes that are parties to the contract. It also allows the user to update the contract and verify that the update is visible to only parties to the contract. 
 
 ## Before you begin
 
 ### Quorum
 Clone [quorum](https://github.com/azeem-r00t/quorum) and follow the instructions in [build/docker/tests/README.md](https://github.com/azeem-r00t/quorum/tree/master/build/docker/tests/README.md) to create a five-node quorum network. 
 
-After setting up the five-node quorum network, you will now need to compile and install the smart contract on that network. During the quorum docker setup, you would have run a `setup.sh` script. That scripts outputs the public keys for each node. You will see different values when you run it but they will look similar to the following: 
+After setting up the five-node quorum network, you will need to get ready to deploy a private smart contract. During the quorum docker setup, you would have run a `setup.sh` script. That scripts outputs the public keys for each node. You will see different values on your machine but they will look similar to the following: 
 
 ```
 ...
@@ -26,7 +26,9 @@ Node 4 public key: LKguxT5/wwtBapkobjsa2EnRc5jK/XoZUEonF0ZwBXc=
 Node 5 public key: VDtzPHon2s20cvjLMLJguPtyReMnEaNotDtCzJGRSVI=
 ```
 
-You can pick any two nodes to setup the private contract. By setting up a private contract between any two nodes, you create a privately maintained state between these nodes that is not visible to the other nodes. This quickstart has a UI that showcases this feature of quorum (that is different from the public blockchain and is of significant value in a private blockchain setup where all parties can't be privvy to all the details of all transactions). 
+You can pick any two nodes to setup the private contract (Node 1 should be one of the nodes you pick because the rest of the instructions assume Node 1 is one of the parties to the contract). 
+
+By setting up a private contract between any two nodes, you create a privately maintained state between these nodes that is not visible to the other nodes. This quickstart has a UI that showcases this feature of quorum (that is different from the public blockchain and is of significant value in a private blockchain setup where all parties can't be privvy to all the details of all transactions). 
 
 ### Development tools
 We use the [Truffle Suite](http://truffleframework.com/) for compiling contracts and deploying the bytecode to the quorum network. You can install the truffle suite using the following command: 
@@ -50,9 +52,9 @@ cd client && npm install
 ```
 
 ### Setting up the contracts
-We have to do some manual work to set up the contracts so they are deployed correctly. The code in this project refers the public keys for the private network I had setup. We assume that the default node that we use to deploy the contract will be `Node 1`. So, `Node 1` will always be a party to the contract. You can pick one of the other nodes as the second party and copy that public key (from your output - not from what is listed above). 
+We have to do some manual work to set up the contracts so they are deployed correctly. We assume that the default node that we use to deploy the contract will be `Node 1`. So, `Node 1` will always be a party to the contract. You can pick one of the other nodes as the second party and copy that public key (from your output - not from what is listed above). 
 
-Update `toKeys` in the configuration file `config/default.json` to point to your own public key for the second party to the private smart contract. Like mentioned before, we will be deploying the contract using ``Node 1`` so you should choose one of the other nodes as the second party. 
+Update `toKeys` in the configuration file `config/default.json` to point to the public key of the second party to the private smart contract. Like mentioned before, we will be deploying the contract using ``Node 1`` so you should choose one of the other nodes as the second party. 
 
 After you have updated the public key, run the following commands to compile and deploy the contract: 
 
@@ -73,7 +75,7 @@ Saving successful migration to network...
 Saving artifacts...
 ```
 
-Now, your private contract is on the blockchain and its state is encrypted and only available to the parties that were identified earlier (node 1 and the second node that you picked earlier). 
+Now, your private contract is on the blockchain and its storage is encrypted and only available to the parties that were identified earlier (node 1 and the second node that you picked). 
 
 ### Let's see how it works
 
@@ -82,6 +84,14 @@ This is the easy part now. Run the following at the top-level directory of the p
 ```npm start```
 
 This will start both the API server and the development server for the UI. It should open up your browser to ```localhost:3000```. 
+
+## UI 
+
+The UI shows the storage of the five nodes and you will notice that only two (node 1 and whatever other node you picked earlier) show the storage value. You can utilize the console to update this shared secret and watch it updated in the UI. In the backend, we are issuing a request to the blockchain to view the stored secret at all nodes but we are only getting back the value on the nodes that are party to the contract. 
+
+In a distributed app, these may be two banks or a set of banks that need to restrict access to transactions to themselves and a third-party. Another set of banks could execute another contract with the same third-party. The third-party would have access to all data but the two sets of banks can't see each other's data. 
+
+We are sure you can think of other ways this will be useful as well (eg: voting scenarios, supply chain scenarios where trade secrets are important). 
 
 ## Open Issues
 
