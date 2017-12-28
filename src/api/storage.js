@@ -14,7 +14,6 @@ function addProtocolIfNeeded(host) {
   if (!/^(?:f|ht)tps?:\/\//.test(host)) {
     url = "http://" + host;
   }
-  console.log(url);
   return url;
 }
 
