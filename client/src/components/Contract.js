@@ -45,14 +45,15 @@ function Contract(props) {
       avatar={<Avatar><FaceIcon  className={classes.svgIcon}/></Avatar>}
       className={classes.chip}/>
   );
-  console.log(contractPartyChips); 
 
   return (
     <div className={classes.row}>
+    {/* TODO enable after the api server has /api/contracts available
         <Chip label={config.SMART_CONTRACT_ADDRESS}
             avatar={<Avatar><VerifiedUserIcon className={classes.svgIcon}/></Avatar>}
             className={classes.chip}/> 
         {contractPartyChips}
+    */}
     </div>
   );
 }
