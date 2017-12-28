@@ -3,7 +3,7 @@ Quickstart project demonstrating private smart contract execution on a quorum ne
 
 The *SimpleStorage* contract is used as a sample smart-contract by several examples out there. In this quickstart, we deploy the *SimpleStorage* contract as a *private* smart contract to store a shared secret between two parties. 
 
-We demonstrate how the contract works by way of a sample starter app that show cases interaction with a ethereum-type blockchain using the `web3` APIs and `truffle` framework.
+We use a web app to demonstrate how the contract works.
 
 This quickstart has as API server and a front-end client. The API server exposes a domain and contract-specific API for the front-end and utilizes the `truffle` framework and the `web3` api to interact with the smart contract on the blockchain. 
 
