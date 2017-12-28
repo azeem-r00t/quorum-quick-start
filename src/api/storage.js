@@ -57,7 +57,7 @@ router.post('/', async function(req, res, next) {
   try {
     let instance = await getContract(host); 
     // TODO externalize privateFor, is there a way to retrieve it from the contract object
-    let result = await instance.set(value, {privateFor: ["oXt+2ucDoU90oMNcHTalxg3T9s2Dh8Ncqx2/OwG8kCo="]});
+    let result = await instance.set(value, {privateFor: ["VDtzPHon2s20cvjLMLJguPtyReMnEaNotDtCzJGRSVI="]});
     console.log(result);
     // result.tx -- tx hash
     // result.logs -- events triggered during this transaction

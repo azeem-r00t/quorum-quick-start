@@ -46,10 +46,29 @@ const styles = theme => ({
 });
 
 class TransactionForm extends React.Component {
-  state = {
+  constructor(props) {
+    super(props); 
+    this.state = {
       sharedSecret: '42',
-      transactionOutput: 'a',
-  };
+      transactionOutput: ''
+    }
+  }
+
+  handleClick = async event => {
+    console.log(this.state.sharedSecret);
+    let response = await fetch('/api/storage?host=127.0.0.1:22001', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "value": this.state.sharedSecret
+      })
+    }); 
+    let data = await response.json(); 
+    console.log(JSON.stringify(data, null, 2));
+  }
 
   handleChange = sharedSecret => event => {
     this.setState({
@@ -75,13 +94,13 @@ class TransactionForm extends React.Component {
                 value={this.state.sharedSecret}
                 onChange={this.handleChange('sharedSecret')}
                 />
-                <Button className={classes.button} raised color="primary">
+                <Button className={classes.button} raised color="primary" onClick={this.handleClick}>
                 Save
                 <Save className={classes.rightIcon} />
                 </Button>    
             </form>    
             <Typography component="p" className={classes.log}>
-            {this.state.transactionOutput}
+              {this.state.transactionOutput}
             </Typography>
         </Paper>
         </div>
