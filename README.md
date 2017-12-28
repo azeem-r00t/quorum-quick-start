@@ -37,7 +37,7 @@ We use the [Truffle Suite](http://truffleframework.com/) for compiling contracts
 
 We also use the [`concurrently`]() to run the backend-server (that has the APIs) and the front-end client. Please use the following command to install concurrently: 
 
-```npm install -g concurrenlty```
+```npm install -g concurrently```
 
 ## Getting Started 
 
