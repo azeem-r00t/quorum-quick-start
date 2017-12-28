@@ -97,6 +97,12 @@ We are sure you can think of other ways this will be useful as well (eg: voting 
 
 I'm not done yet. There are several improvements that can be made to this project to showcase and demonstrate the value of a private blockchain deployment that enables privacy of transactions. I have a list of open issues that I have opened that I'll continue to work on in the future. 
 
+## Issues that you may run into 
+
+1. Depending on how much memory or CPU you have assigned to your docker installation, the quorum network may stall. If this happens, you will notice in the geth log that the ethhas verification cache is being regenerated at an extremely slow pace and both the raft protocol and quorum node peers will keep dropping and reconnecting. I haven't found an easy way to resolve this other than memory and CPU. You may have better luck. 
+
+2. To debug any issues with geth, you can log into one of the docker containers, attach to geth over ipc, and then utilize the admin and other APIs to verify various aspects of this. Please refer to ethereum/go-ethereum documentation on further details. 
+
 ## Contributing 
 
 Please feel free to fork this and improve it. You are also welcome to pick and work on any of the issues that are on my radar already.  
