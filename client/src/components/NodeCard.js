@@ -39,7 +39,7 @@ class NodeCard extends Component {
   componentDidMount() {
     this.timerID = setInterval(
       () => this.loadLatestSharedSecret(), 
-      5000
+      1000
     );
   }
 

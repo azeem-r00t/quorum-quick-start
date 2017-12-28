@@ -2,6 +2,7 @@ var express = require('express');
 var Web3 = require('web3');
 var contract = require('truffle-contract'); 
 var SimpleStorageContract = require('../contracts/SimpleStorage.json');
+var config = require('config');
 
 var router = express.Router();
 var DEFAULT_HOST = "http://127.0.0.1:9545";
@@ -52,8 +53,9 @@ router.post('/', async function(req, res, next) {
 
   try {
     let instance = await getContract(host); 
-    // TODO externalize privateFor, is there a way to retrieve it from the contract object
-    let result = await instance.set(value, {privateFor: ["VDtzPHon2s20cvjLMLJguPtyReMnEaNotDtCzJGRSVI="]});
+    // TODO is there a way to retrieve it from the contract object
+    var toKey = config.get("toKeys")[0];
+    let result = await instance.set(value, {privateFor: [toKey]});
     // result.tx -- tx hash
     // result.logs -- events triggered during this transaction
     // reslult.reciept -- receipt objects (includes gas used)
