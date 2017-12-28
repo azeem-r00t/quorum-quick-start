@@ -38,10 +38,12 @@ const styles = theme => ({
     overflow: 'auto',
   },
   log: {
-    fontSize: 8, 
+    fontSize: 12, 
     paddingTop: 10, 
-    margin: 10,
-    fontStyle: 'italic',      
+    margin: 25,
+    fontStyle: 'italic',  
+    wordWrap: 'break-word', 
+    fontFamily: 'Lucida Console',
   }
 });
 
@@ -49,13 +51,12 @@ class TransactionForm extends React.Component {
   constructor(props) {
     super(props); 
     this.state = {
-      sharedSecret: '42',
+      sharedSecret: '',
       transactionOutput: ''
     }
   }
 
   handleClick = async event => {
-    console.log(this.state.sharedSecret);
     let response = await fetch('/api/storage?host=127.0.0.1:22001', {
       method: 'POST',
       headers: {
@@ -67,7 +68,9 @@ class TransactionForm extends React.Component {
       })
     }); 
     let data = await response.json(); 
-    console.log(JSON.stringify(data, null, 2));
+    let output = JSON.stringify(data); 
+    console.dir(output);    
+    this.setState( { transactionOutput: output } );
   }
 
   handleChange = sharedSecret => event => {
