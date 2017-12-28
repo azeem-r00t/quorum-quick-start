@@ -48,7 +48,7 @@ From the top-level directory of the project, issue the following commands:
 
 ```
 npm install
-cd client && npm install
+cd client && npm install && cd ..
 ```
 
 ### Setting up the contracts
@@ -60,7 +60,7 @@ After you have updated the public key, run the following commands to compile and
 
 ```
 npm run build:contracts
-npm run contracts:migrate
+NODE_CONFIG_DIR=../config npm run contracts:migrate
 ```
 
 You should see a something similar to the following (of course, your hashes will be different). 
