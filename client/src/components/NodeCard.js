@@ -32,14 +32,14 @@ class NodeCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      sharedSecret: '', 
+      sharedSecret: ''
     };
   }
 
   componentDidMount() {
     this.timerID = setInterval(
       () => this.loadLatestSharedSecret(), 
-      1000
+      5000
     );
   }
 
@@ -47,17 +47,15 @@ class NodeCard extends Component {
     clearInterval(this.timerID); 
   }
 
-  loadLatestSharedSecret() {
-    fetch("/api/storage?host=" + this.props.host)
-        .then((response) => {
-        if (response.status >= 400) {
-          throw new Error("Uh oh!");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        this.setState( { sharedSecret: data.secret } );
-      });    
+  async loadLatestSharedSecret() {
+    try {
+      let response = await fetch("/api/storage?host=" + this.props.host); 
+      let data = await response.json(); 
+      this.setState( { sharedSecret: data.secret } );   
+    } catch (e) {
+      console.log(e); 
+      this.setState( { sharedSecret: '#E' });
+    }
   }
   
   render() {
