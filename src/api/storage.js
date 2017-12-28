@@ -4,7 +4,6 @@ var contract = require('truffle-contract');
 var SimpleStorageContract = require('../contracts/SimpleStorage.json');
 
 var router = express.Router();
-var storage = contract(SimpleStorageContract); 
 var DEFAULT_HOST = "http://127.0.0.1:9545";
 
 // hack to ensure 0.1 version of web3 doesn't clash with older versions
@@ -22,24 +21,24 @@ function addProtocolIfNeeded(host) {
 async function getContract(host) {
   let web3 = new Web3(addProtocolIfNeeded(host)); 
   let coinbase = await web3.eth.getCoinbase(); 
+  let storage = contract(SimpleStorageContract); 
   storage.setProvider(web3.currentProvider);
-  storage.defaults({ from: coinbase}); // bug in truffle that requires us that we set this
+  storage.defaults({ from: coinbase}); // bug in truffle that requires us that we set this, otherwise set fails with Invalid address
 
   let instance = await storage.deployed(); 
-  console.log(instance.address);
 
   return instance; 
 }
 
 /* GET storage */
 router.get('/', async function(req, res, next) {
-  let host = req.query.host || DEFAULT_HOST; 
-  console.log(host);
+  var host = req.query.host || DEFAULT_HOST; 
 
   try {
     let instance = await getContract(host); 
     let secret = await instance.get();   
-    res.send({ contract: { address: instance.address }, secret: secret }); 
+
+    res.send({ host: host, contract: { address: instance.address }, secret: secret }); 
   } catch(e) {
     console.log(e);
     // an error occurred, for now, just send it back
@@ -51,14 +50,11 @@ router.get('/', async function(req, res, next) {
 router.post('/', async function(req, res, next) {
   let host = req.query.host || DEFAULT_HOST;
   let value = req.body.value;
-  console.log(host);
-  console.log(value); 
 
   try {
     let instance = await getContract(host); 
     // TODO externalize privateFor, is there a way to retrieve it from the contract object
     let result = await instance.set(value, {privateFor: ["VDtzPHon2s20cvjLMLJguPtyReMnEaNotDtCzJGRSVI="]});
-    console.log(result);
     // result.tx -- tx hash
     // result.logs -- events triggered during this transaction
     // reslult.reciept -- receipt objects (includes gas used)
